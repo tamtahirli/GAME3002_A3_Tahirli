@@ -19,7 +19,6 @@ public class Player : MonoBehaviour
 	private Rigidbody m_rBody = null;
 	private BoxCollider m_bCollider = null;
 	private float m_fHalfHeight = 0;
-	private Vector3 m_vStartScale = Vector3.zero;
 	[SerializeField] private bool m_bGrounded = false;
 
     void Awake()
@@ -28,9 +27,18 @@ public class Player : MonoBehaviour
 		m_bCollider = GetComponent<BoxCollider>();
 		m_animator = GetComponentInChildren<Animator>();
 		m_fHalfHeight = m_bCollider.bounds.extents.y;
-		m_vStartScale = transform.localScale;
 		m_vStartPos = transform.position;
 		player = this;
+	}
+
+	bool pressedJump = false;
+
+	private void Update()
+	{
+		if (Input.GetButtonDown("Jump")) // FixedUpdate proved real bad for detecting button down.
+		{
+			pressedJump = true; // Used in FixedUpdate
+		}
 	}
 
     private void FixedUpdate()
@@ -47,24 +55,29 @@ public class Player : MonoBehaviour
 		float fAbsX = Mathf.Abs(m_rBody.velocity.x);
 		m_animator.SetFloat("Movement", fAbsX / m_fTopSpeed); // Set animator float from scale 0-1.
 
-		if(fAbsX > m_fTopSpeed) // Only use top speed for lateral movement
+		Vector3 velocity = m_rBody.velocity;
+		if (fAbsX > m_fTopSpeed) // Only use top speed for lateral movement
         {
-			Vector3 velocity = m_rBody.velocity;
 			velocity.x = velocity.x < 0 ? -m_fTopSpeed : m_fTopSpeed;
 			m_rBody.velocity = velocity;
         }
 
-		transform.localScale = fHorizontal == 0 ? transform.localScale : fHorizontal < 0 ? new Vector3(-m_vStartScale.x, m_vStartScale.y, m_vStartScale.z) : new Vector3(m_vStartScale.x, m_vStartScale.y, m_vStartScale.z);
+		// Rotate on movement
+		transform.rotation = fHorizontal == 0 ? transform.rotation : fHorizontal < 0 ? Quaternion.Euler(0, 180, 0) : Quaternion.Euler(0, 0, 0);
 		
 		// Jump only if grounded.
 		if (m_bGrounded)
 		{
-			if (Input.GetButtonDown("Jump"))
+			if (pressedJump)
 			{
-				m_rBody.AddForce(Vector3.up * m_fJumpForce, ForceMode.VelocityChange);
+				velocity.y = 0;
+				m_rBody.velocity = velocity; // Reset Y velocity
+				m_rBody.AddForce(Vector3.up * m_fJumpForce, ForceMode.VelocityChange); // Set Y velocity by force
 				m_animator.SetTrigger("Jump");
 			}
 		}
+
+		pressedJump = false; // Reset so late jumps aren't a thing
 	}
 
     private void OnCollisionStay(Collision collision)
@@ -80,5 +93,18 @@ public class Player : MonoBehaviour
 	public static void Respawn()
     {
 		player.transform.position = m_vStartPos;
+		player.m_rBody.velocity = Vector3.zero;
+		player.m_rBody.angularVelocity = Vector3.zero;
+		player.transform.rotation = Quaternion.Euler(0, 0, 0);
+    }
+
+	public static Rigidbody Rgbd()
+    {
+		return player.m_rBody;
+    }
+
+	public static Animator GetAnimator()
+    {
+		return player.m_animator;
     }
 }

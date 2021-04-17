@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 762284420423981167}
   m_Layer: 0
   m_Name: Player
-  m_TagString: Untagged
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -47,10 +47,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_animator: {fileID: 6628938070005563997}
-  m_fMovementSpeed: 50
-  m_fTopSpeed: 20
+  m_fMovementSpeed: 30
+  m_fTopSpeed: 10
   m_fJumpForce: 5
   m_fSlowDownScale: 0.95
+  m_fGroundedThreshold: 0.2
   m_lGroundedMask:
     serializedVersion: 2
     m_Bits: 256
@@ -63,13 +64,13 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 762284420423981160}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 100
   m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 72
+  m_Constraints: 112
   m_CollisionDetection: 2
 --- !u!65 &762284420423981167
 BoxCollider:
@@ -82,8 +83,8 @@ BoxCollider:
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 0.4451907, y: 1.7779679, z: 0.5688524}
-  m_Center: {x: 0.015154853, y: 0.90659356, z: -0.010623932}
+  m_Size: {x: 0.48501337, y: 1.883074, z: 0.7029877}
+  m_Center: {x: 0.013014287, y: 0.9431578, z: -0.01718235}
 --- !u!1001 &762284421200904140
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -48,10 +48,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e485ea745a158ff438abfc42c1b19f8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_fAngularTorque: 10
-  m_fMinRotation: 0
-  m_fMaxRotation: 0
+  m_fMaxTorque: 5
+  m_fMinRotation: -120
+  m_fMaxRotation: 95
   m_fRotationalThreshold: 5
+  m_fPushForce: 30
+  m_fUpPushForce: 5
+  m_vForce: {x: 0, y: 1000, z: 1000}
+  m_vCenterOfMass: {x: 0, y: 0, z: 1.4}
+  m_vForcePoint: {x: 0, y: 4.5, z: 1.34}
 --- !u!54 &5261741484692337997
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -60,7 +65,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6557282896480556081}
   serializedVersion: 2
-  m_Mass: 1
+  m_Mass: 200
   m_Drag: 0
   m_AngularDrag: 0
   m_UseGravity: 0
@@ -79,7 +84,7 @@ HingeJoint:
   m_Anchor: {x: 0, y: 5, z: 1.35}
   m_Axis: {x: 1, y: 0, z: 0}
   m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 30.475853, y: 28.8, z: -6.1800003}
+  m_ConnectedAnchor: {x: 32.13, y: 7.81, z: -7.31}
   m_UseSpring: 0
   m_Spring:
     spring: 1
