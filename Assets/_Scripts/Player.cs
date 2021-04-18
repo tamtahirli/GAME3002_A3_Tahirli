@@ -11,7 +11,6 @@ public class Player : MonoBehaviour
 	[SerializeField] private float m_fMovementSpeed = 1f;
     [SerializeField] private float m_fTopSpeed = 20f;
     [SerializeField] private float m_fJumpForce = 5f;
-	[SerializeField] private float m_fSlowDownScale = 0.99f;
 	[SerializeField] private float m_fGroundedThreshold = 0.05f;
 	[SerializeField] private LayerMask m_lGroundedMask = new LayerMask();
 
@@ -52,8 +51,6 @@ public class Player : MonoBehaviour
 		float fHorizontal = Input.GetAxisRaw("Horizontal");
 
 		m_rBody.AddForce(Vector3.right * fHorizontal * m_fMovementSpeed * m_fSpeedScale, ForceMode.VelocityChange); // Add force on rigid body based on horizontal movement
-
-		//m_rBody.velocity *= m_fSlowDownScale; // Slow down player every frame to avoid slideyness
 
 		float fAbsX = Mathf.Abs(m_rBody.velocity.x);
 		m_animator.SetFloat("Movement", fAbsX / m_fTopSpeed); // Set animator float from scale 0-1.
