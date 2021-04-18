@@ -8,8 +8,7 @@ public class DeathBox : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            Player.Respawn();
-            GameManager.ResetRigidBodies();
+            GameManager.ResetGame();
         }
     }
 }

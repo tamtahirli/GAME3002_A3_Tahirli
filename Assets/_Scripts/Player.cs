@@ -19,7 +19,10 @@ public class Player : MonoBehaviour
 	private Rigidbody m_rBody = null;
 	private BoxCollider m_bCollider = null;
 	private float m_fHalfHeight = 0;
+	private int m_iKeys = 0;
 	[SerializeField] private bool m_bGrounded = false;
+
+	private float m_fJumpScale = 1, m_fSpeedScale = 1;
 
     void Awake()
     {
@@ -46,9 +49,9 @@ public class Player : MonoBehaviour
 		m_bGrounded = CheckGrounded();
 		m_animator.SetBool("Grounded", m_bGrounded);
 
-		float fHorizontal = Input.GetAxis("Horizontal");
+		float fHorizontal = Input.GetAxisRaw("Horizontal");
 
-		m_rBody.AddForce(Vector3.right * fHorizontal, ForceMode.VelocityChange); // Add force on rigid body based on horizontal movement
+		m_rBody.AddForce(Vector3.right * fHorizontal * m_fMovementSpeed * m_fSpeedScale, ForceMode.VelocityChange); // Add force on rigid body based on horizontal movement
 
 		//m_rBody.velocity *= m_fSlowDownScale; // Slow down player every frame to avoid slideyness
 
@@ -72,13 +75,23 @@ public class Player : MonoBehaviour
 			{
 				velocity.y = 0;
 				m_rBody.velocity = velocity; // Reset Y velocity
-				m_rBody.AddForce(Vector3.up * m_fJumpForce, ForceMode.VelocityChange); // Set Y velocity by force
+				m_rBody.AddForce(Vector3.up * m_fJumpForce * m_fJumpScale, ForceMode.VelocityChange); // Set Y velocity by force
 				m_animator.SetTrigger("Jump");
 			}
 		}
 
 		pressedJump = false; // Reset so late jumps aren't a thing
 	}
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.CompareTag("Key"))
+        {
+			other.gameObject.SetActive(false);
+			m_iKeys++;
+			GameManager.SetInfoMsg("You found a key!", 2);
+        }
+    }
 
     private void OnCollisionStay(Collision collision)
     {
@@ -96,6 +109,7 @@ public class Player : MonoBehaviour
 		player.m_rBody.velocity = Vector3.zero;
 		player.m_rBody.angularVelocity = Vector3.zero;
 		player.transform.rotation = Quaternion.Euler(0, 0, 0);
+		player.m_iKeys = 0;
     }
 
 	public static Rigidbody Rgbd()
@@ -106,5 +120,30 @@ public class Player : MonoBehaviour
 	public static Animator GetAnimator()
     {
 		return player.m_animator;
+    }
+
+	public static void SetJumpScale(float scale)
+    {
+		player.m_fJumpScale = scale;
+    }
+	
+	public static void SetSpeedScale(float scale)
+    {
+		player.m_fSpeedScale = scale;
+    }
+
+	public static void AddKey()
+    {
+		player.m_iKeys++;
+    }
+
+	public static void RemoveKey()
+    {
+		player.m_iKeys--;
+    }
+
+	public static int GetKeys()
+    {
+		return player.m_iKeys;
     }
 }
