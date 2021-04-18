@@ -41,6 +41,11 @@ public class Player : MonoBehaviour
 		{
 			pressedJump = true; // Used in FixedUpdate
 		}
+
+		if(Input.GetKeyDown(KeyCode.Escape))
+        {
+			Application.Quit();
+        }
 	}
 
     private void FixedUpdate()
